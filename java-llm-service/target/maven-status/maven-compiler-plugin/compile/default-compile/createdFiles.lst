@@ -1,0 +1,5 @@
+com\example\llm\api\LlmGenerationService.class
+com\example\llm\api\PromptRequest.class
+com\example\llm\LlmServiceApplication.class
+com\example\llm\api\GenerationResponse.class
+com\example\llm\api\GenerationController.class

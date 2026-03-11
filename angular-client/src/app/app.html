@@ -1,0 +1,29 @@
+<main class="page">
+  <section class="panel">
+    <h1>LLM Gateway Demo</h1>
+    <p>Flow: User -> Angular -> Spring Boot -> Django -> LLM</p>
+
+    <label for="prompt">Prompt</label>
+    <textarea
+      id="prompt"
+      rows="5"
+      [(ngModel)]="prompt"
+      placeholder="Type your prompt here..."
+    ></textarea>
+
+    <button type="button" (click)="generate()" [disabled]="loading || !prompt.trim()">
+      {{ loading ? 'Generating...' : 'Generate' }}
+    </button>
+
+    @if (error) {
+      <div class="error">{{ error }}</div>
+    }
+
+    @if (result) {
+      <div class="result">
+        <h2>Response</h2>
+        <p>{{ result }}</p>
+      </div>
+    }
+  </section>
+</main>

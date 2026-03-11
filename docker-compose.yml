@@ -1,0 +1,39 @@
+
+services:
+  angular-client:
+    build: ./angular-client
+    ports:
+      - "4200:4200"
+    depends_on:
+      - java-llm-service
+
+  django-service:
+    build: ./django-service
+    environment:
+      - LLM_API_BASE_URL=${LLM_API_BASE_URL:-https://api.groq.com/openai}
+      - LLM_API_CHAT_PATH=${LLM_API_CHAT_PATH:-/v1/chat/completions}
+      - LLM_API_MODEL=${LLM_API_MODEL:-llama-3.1-8b-instant}
+      - LLM_API_KEY=${LLM_API_KEY:-}
+      - LLM_API_MOCK_WHEN_MISSING_KEY=${LLM_API_MOCK_WHEN_MISSING_KEY:-true}
+    ports:
+      - "8001:8001"
+
+  java-llm-service:
+    build: ./java-llm-service
+    environment:
+      - DJANGO_SERVICE_URL=http://django-service:8001
+      - DJANGO_GENERATE_PATH=/llm/generate
+    ports:
+      - "8081:8080"
+    depends_on:
+      - django-service
+
+  python-service:
+    build: ./python-service
+    environment:
+      - JAVA_SERVICE_URL=http://java-llm-service:8080
+    ports:
+      - "8000:8000"
+    depends_on:
+      - java-llm-service
+
